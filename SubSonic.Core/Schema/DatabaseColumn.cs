@@ -172,10 +172,9 @@ namespace SubSonic.Schema
 
         public override bool Equals(object obj)
         {
-            if(obj.GetType() == typeof(IColumn))
+            var compareTo = obj as IColumn;
+            if (compareTo != null)
             {
-                DatabaseColumn compareTo = (DatabaseColumn)obj;
-
                 if(IsPrimaryKey)
                     return true; //no altering the PK
 
@@ -186,9 +185,10 @@ namespace SubSonic.Schema
                 {
                     return compareTo.DataType == DataType
                            && NumericPrecision == compareTo.NumericPrecision
-                           && NumberScale == compareTo.NumberScale;
+                           && NumberScale == compareTo.NumberScale
+                           && compareTo.IsNullable == IsNullable;
                 }
-                return compareTo.DataType == DataType;
+                return compareTo.DataType == DataType && compareTo.IsNullable == IsNullable;
             }
             return base.Equals(obj);
         }
